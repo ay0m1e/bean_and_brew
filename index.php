@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bean &amp; Brew | Calm Coffee Experiences</title>
+    <title>Bean and Brew | Calm Coffee</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,198 +13,216 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- PHP include: header.php -->
-    <?php include 'header.php'; ?>
+    <!-- HEADER START -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#">Bean and Brew</a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul class="nav-list">
+            <li><a class="nav-link is-active" href="#">Home</a></li>
+            <li><a class="nav-link" href="#">Book</a></li>
+            <li><a class="nav-link" href="#">Pre-order</a></li>
+            <li><a class="nav-link" href="#">Lessons</a></li>
+            <li><a class="nav-link" href="#">Account</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- HEADER END -->
 
-    <main id="main">
+    <main>
+      <!-- HERO START -->
       <section class="hero">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow">Bean &amp; Brew</p>
-            <h1>Slow, intentional coffee. Ready on your time.</h1>
+        <div class="container hero-inner">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">Bean and Brew</p>
+            <h1>Calm coffee, curated to meet your day.</h1>
             <p class="lead">
-              Pre-order your favorites, reserve a quiet table, and learn the
-              craft with guided brew lessons in one calm flow.
+              Pre-order in minutes, reserve a quiet table, and step into a
+              considered brew experience.
             </p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="preorder.php">Pre-order</a>
-              <a class="btn btn-secondary" href="book.php">Book a table</a>
+            <div class="cta-group">
+              <a class="btn btn-primary" href="#">Pre-order</a>
+              <a class="btn btn-secondary" href="#">Book a table</a>
             </div>
-            <ul class="hero-highlights">
-              <li>Order ahead in under a minute</li>
-              <li>Reserve a table without waiting</li>
-              <li>Small-group barista lessons</li>
-            </ul>
           </div>
-
-          <div class="hero-panel">
+          <div class="hero-panel reveal delay-1">
             <div class="card hero-card">
-              <p class="card-eyebrow">Ordering flow</p>
-              <div class="order-step">
-                <span class="step-dot" aria-hidden="true"></span>
+              <p class="card-label">Today's rhythm</p>
+              <div class="hero-row">
+                <span class="dot" aria-hidden="true"></span>
                 <div>
-                  <p class="step-title">Choose your brew</p>
-                  <p class="step-caption">
-                    Espresso, pour-over, or cold brew
-                  </p>
+                  <p class="row-title">Pickup windows</p>
+                  <p class="row-text">Every 15 minutes, no rush.</p>
                 </div>
               </div>
-              <div class="order-step">
-                <span class="step-dot" aria-hidden="true"></span>
+              <div class="hero-row">
+                <span class="dot" aria-hidden="true"></span>
                 <div>
-                  <p class="step-title">Set your pickup</p>
-                  <p class="step-caption">15 minute windows, no rush</p>
+                  <p class="row-title">Table pacing</p>
+                  <p class="row-text">Two-hour calm sessions.</p>
                 </div>
               </div>
-              <div class="order-step">
-                <span class="step-dot" aria-hidden="true"></span>
+              <div class="hero-row">
+                <span class="dot" aria-hidden="true"></span>
                 <div>
-                  <p class="step-title">Customize</p>
-                  <p class="step-caption">Milk, sweetness, temperature</p>
+                  <p class="row-title">Lessons</p>
+                  <p class="row-text">Small groups, hands-on.</p>
                 </div>
               </div>
-              <div class="order-summary">
+              <div class="hero-meta">
                 <div>
-                  <p class="summary-label">Ready in</p>
-                  <p class="summary-value">8 minutes</p>
+                  <p class="meta-label">Average wait</p>
+                  <p class="meta-value">6 minutes</p>
                 </div>
-                <a class="btn btn-text" href="preorder.php">Customize</a>
+                <a class="btn btn-text" href="#">Customize</a>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <!-- HERO END -->
 
-      <section class="section">
+      <!-- SERVICES START -->
+      <section class="section services">
         <div class="container">
-          <div class="section-header">
-            <div>
-              <p class="section-eyebrow">Pre-order</p>
-              <h2>Signature drinks to start the day</h2>
-              <p class="section-lead">
-                Balanced, seasonal, and ready when you arrive.
-              </p>
-            </div>
-            <a class="btn btn-text" href="preorder.php">View full menu</a>
+          <div class="section-head reveal">
+            <p class="section-label">Services</p>
+            <h2>Three fast ways to enjoy Bean and Brew.</h2>
+            <p class="section-lead">
+              Keep it quick or linger longer with intentional options.
+            </p>
           </div>
-
-          <div class="card-grid">
-            <article class="card product-card">
-              <div class="card-top">
-                <span class="tag">Signature</span>
-                <span class="price">$5.80</span>
-              </div>
-              <h3>Oat Milk Latte</h3>
-              <p class="card-meta">Espresso, oat milk, cacao dust</p>
-              <div class="card-actions">
-                <a class="btn btn-secondary" href="preorder.php"
-                  >Add to pre-order</a
-                >
-              </div>
+          <div class="service-grid">
+            <article class="card service-card reveal delay-1">
+              <h3>Pre-order</h3>
+              <p class="card-text">Build your drink and collect at your time.</p>
+              <a class="btn btn-secondary" href="#">Start pre-order</a>
             </article>
-
-            <article class="card product-card">
-              <div class="card-top">
-                <span class="tag">Cold brew</span>
-                <span class="price">$4.90</span>
-              </div>
-              <h3>Maple Cold Brew</h3>
-              <p class="card-meta">Slow-steeped, maple, citrus peel</p>
-              <div class="card-actions">
-                <a class="btn btn-secondary" href="preorder.php"
-                  >Add to pre-order</a
-                >
-              </div>
+            <article class="card service-card reveal delay-2">
+              <h3>Book a table</h3>
+              <p class="card-text">Reserve a calm corner without the wait.</p>
+              <a class="btn btn-secondary" href="#">Reserve a table</a>
             </article>
-
-            <article class="card product-card">
-              <div class="card-top">
-                <span class="tag">Pour-over</span>
-                <span class="price">$6.20</span>
-              </div>
-              <h3>Single Origin No. 4</h3>
-              <p class="card-meta">Floral notes, honey finish</p>
-              <div class="card-actions">
-                <a class="btn btn-secondary" href="preorder.php"
-                  >Add to pre-order</a
-                >
-              </div>
+            <article class="card service-card reveal delay-3">
+              <h3>Baking lessons</h3>
+              <p class="card-text">Learn pastry basics with guided tastings.</p>
+              <a class="btn btn-secondary" href="#">View lessons</a>
             </article>
           </div>
         </div>
       </section>
+      <!-- SERVICES END -->
 
-      <section class="section">
-        <div class="container section-split">
-          <div class="section-copy">
-            <p class="section-eyebrow">Book</p>
-            <h2>Quiet tables, reserved just for you</h2>
-            <p class="section-lead">Choose the vibe you want and skip the wait.</p>
-            <a class="btn btn-secondary" href="book.php">Book a table</a>
+      <!-- VISUAL PAUSE START -->
+      <section class="pause-strip">
+        <div class="container pause-inner">
+          <div class="pause-panel reveal">
+            <p class="section-label">A quiet pause</p>
+            <h2>Soft light, warm cups, and room to breathe.</h2>
+            <p class="section-lead">
+              Inspired by a slower pace and a deliberate pour.
+            </p>
           </div>
-
-          <div class="card-grid booking-grid">
-            <article class="card booking-card">
-              <p class="card-eyebrow">Window table</p>
-              <h3>Morning light</h3>
-              <p class="card-meta">Seats 2 to 4 - 9:00 to 11:00</p>
-              <p class="card-footnote">Includes a carafe refill</p>
-            </article>
-
-            <article class="card booking-card">
-              <p class="card-eyebrow">Community table</p>
-              <h3>Midday focus</h3>
-              <p class="card-meta">Seats 4 to 6 - 12:00 to 14:00</p>
-              <p class="card-footnote">Quiet zone seating</p>
-            </article>
+          <div
+            class="pause-image reveal delay-1"
+            role="img"
+            aria-label="Cafe interior placeholder"
+          >
+            <span>Image placeholder</span>
           </div>
         </div>
       </section>
+      <!-- VISUAL PAUSE END -->
 
-      <section class="section">
+      <!-- FEATURED START -->
+      <section class="section featured">
         <div class="container">
-          <div class="section-header">
-            <div>
-              <p class="section-eyebrow">Lessons</p>
-              <h2>Learn the craft behind the cup</h2>
-              <p class="section-lead">
-                Small-group sessions with hands-on brewing.
-              </p>
-            </div>
-            <a class="btn btn-text" href="lessons.php">Explore lessons</a>
+          <div class="section-head reveal">
+            <p class="section-label">Featured</p>
+            <h2>Curated pours, crafted daily.</h2>
           </div>
-
-          <div class="card-grid">
-            <article class="card lesson-card">
-              <p class="card-eyebrow">60 minutes</p>
-              <h3>Pour-over fundamentals</h3>
-              <p class="card-meta">Grind, bloom, and extraction basics</p>
-              <p class="card-footnote">Next session: Saturday 10:00</p>
+          <div class="featured-grid">
+            <article class="card featured-card featured-large reveal delay-1">
+              <div
+                class="media"
+                role="img"
+                aria-label="Honey oat flat white placeholder"
+              >
+                <span>Image placeholder</span>
+              </div>
+              <div class="card-body">
+                <h3>Honey Oat Flat White</h3>
+                <p class="card-text">
+                  Velvety espresso with toasted oat and honey.
+                </p>
+                <a class="btn btn-secondary" href="#">Add</a>
+              </div>
             </article>
-
-            <article class="card lesson-card">
-              <p class="card-eyebrow">90 minutes</p>
-              <h3>Latte art essentials</h3>
-              <p class="card-meta">Milk texture, pour control, patterns</p>
-              <p class="card-footnote">Next session: Sunday 13:30</p>
-            </article>
-
-            <article class="card lesson-card">
-              <p class="card-eyebrow">45 minutes</p>
-              <h3>Cold brew mastery</h3>
-              <p class="card-meta">Steep time, ratios, and flavor balance</p>
-              <p class="card-footnote">Next session: Friday 17:00</p>
-            </article>
+            <div class="featured-stack">
+              <article class="card featured-card reveal delay-2">
+                <div
+                  class="media"
+                  role="img"
+                  aria-label="Matcha cloud placeholder"
+                >
+                  <span>Image placeholder</span>
+                </div>
+                <div class="card-body">
+                  <h3>Seasonal Matcha Cloud</h3>
+                  <p class="card-text">Soft foam, bright matcha.</p>
+                  <a class="btn btn-text" href="#">View</a>
+                </div>
+              </article>
+              <article class="card featured-card reveal delay-3">
+                <div
+                  class="media"
+                  role="img"
+                  aria-label="Citrus cold brew placeholder"
+                >
+                  <span>Image placeholder</span>
+                </div>
+                <div class="card-body">
+                  <h3>Citrus Cold Brew</h3>
+                  <p class="card-text">Slow-steeped with orange peel.</p>
+                  <a class="btn btn-text" href="#">View</a>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
+      <!-- FEATURED END -->
+
+      <!-- FINAL CTA START -->
+      <section class="final-cta">
+        <div class="container final-inner reveal">
+          <div>
+            <h2>Ready when you are.</h2>
+            <p class="section-lead">
+              Order ahead and arrive to a calm, prepared cup.
+            </p>
+          </div>
+          <a class="btn btn-primary" href="#">Pre-order now</a>
+        </div>
+      </section>
+      <!-- FINAL CTA END -->
     </main>
 
+    <!-- FOOTER START -->
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p class="footer-brand">Bean &amp; Brew</p>
-        <p class="footer-note">Calm coffee, crafted daily.</p>
+        <div>
+          <p class="footer-brand">Bean and Brew</p>
+          <p class="footer-note">Calm coffee, crafted daily.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#">Locations</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy</a>
+        </nav>
       </div>
     </footer>
+    <!-- FOOTER END -->
   </body>
 </html>
