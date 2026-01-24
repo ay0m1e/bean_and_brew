@@ -205,6 +205,58 @@ ul {
   transform: translateY(-50%) scale(1);
 }
 
+/* Mobile nav toggle */
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.nav-toggle-bar {
+  width: 22px;
+  height: 2px;
+  background: var(--coffee);
+  display: block;
+  border-radius: 999px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle-label:hover {
+  background: rgba(74, 52, 46, 0.06);
+}
+
+.nav-toggle:checked + .nav-toggle-label .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle:checked + .nav-toggle-label .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+
+.nav-toggle:checked + .nav-toggle-label .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-toggle:focus-visible + .nav-toggle-label {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* Typography */
 .eyebrow,
 .section-label {
@@ -1103,6 +1155,32 @@ h3 {
 }
 
 /* Responsive */
+/* MOBILE NAV BREAKPOINT */
+@media (max-width: 768px) {
+  .nav-toggle-label {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .site-nav {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .nav-toggle:checked + .nav-toggle-label + .site-nav {
+    max-height: 420px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    margin-top: 10px;
+  }
+}
+
 @media (max-width: 720px) {
   .logo img {
     max-height: 28px;

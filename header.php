@@ -4,6 +4,18 @@
       <img src="assets/images/logo.svg" alt="Bean and Brew logo" />
       <span class="logo-text">Bean and Brew</span>
     </a>
+    <!-- MOBILE HAMBURGER NAV -->
+    <input
+      type="checkbox"
+      id="nav-toggle"
+      class="nav-toggle"
+      aria-label="Toggle navigation"
+    />
+    <label for="nav-toggle" class="nav-toggle-label">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </label>
     <nav class="site-nav" aria-label="Primary">
       <!-- PHP: add "is-active" to the current page link -->
       <ul class="nav-list">

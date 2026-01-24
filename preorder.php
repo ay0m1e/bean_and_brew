@@ -13,25 +13,8 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <!-- HEADER START -->
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="logo" href="index.php" aria-label="Bean and Brew homepage">
-          <img src="assets/images/logo.svg" alt="Bean and Brew logo" />
-          <span class="logo-text">Bean and Brew</span>
-        </a>
-        <nav class="site-nav" aria-label="Primary">
-          <ul class="nav-list">
-            <li><a class="nav-link" href="index.php">Home</a></li>
-            <li><a class="nav-link" href="book.php">Book</a></li>
-            <li><a class="nav-link is-active" href="preorder.php">Pre-order</a></li>
-            <li><a class="nav-link" href="lessons.php">Lessons</a></li>
-            <li><a class="nav-link" href="account.php">Account</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <!-- HEADER END -->
+    <?php include 'header.php'; ?>
+
 
     <main class="preorder-page">
       <!-- PRE-ORDER HERO VARIATION -->
@@ -450,20 +433,7 @@
       <!-- PRE-ORDER CATEGORIES END -->
     </main>
 
-    <!-- FOOTER START -->
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div>
-          <p class="footer-brand">Bean and Brew</p>
-          <p class="footer-note">Calm coffee, crafted daily.</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="#">Locations</a>
-          <a href="#">Contact</a>
-          <a href="#">Privacy</a>
-        </nav>
-      </div>
-    </footer>
-    <!-- FOOTER END -->
+    <?php include 'footer.php'; ?>
+
   </body>
 </html>
