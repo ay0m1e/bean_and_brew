@@ -1,22 +1,13 @@
 <header class="site-header">
   <div class="container header-inner">
-    <a class="logo" href="index.php">Bean &amp; Brew</a>
-
-    <input
-      type="checkbox"
-      id="nav-toggle"
-      class="nav-toggle"
-      aria-label="Toggle navigation"
-    />
-    <label for="nav-toggle" class="nav-toggle-label">
-      <span class="nav-toggle-text">Menu</span>
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
-    </label>
-
+    <a class="logo" href="index.php" aria-label="Bean and Brew homepage">
+      <img src="assets/images/logo.svg" alt="Bean and Brew logo" />
+      <span class="logo-text">Bean and Brew</span>
+    </a>
     <nav class="site-nav" aria-label="Primary">
       <!-- PHP: add "is-active" to the current page link -->
       <ul class="nav-list">
-        <li><a class="nav-link is-active" href="index.php">Home</a></li>
+        <li><a class="nav-link" href="index.php">Home</a></li>
         <li><a class="nav-link" href="book.php">Book</a></li>
         <li><a class="nav-link" href="preorder.php">Pre-order</a></li>
         <li><a class="nav-link" href="lessons.php">Lessons</a></li>
