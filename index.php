@@ -31,9 +31,16 @@
     <!-- HEADER END -->
 
     <main>
-      <!-- HERO START -->
+      <!-- UPDATED HERO -->
       <section class="hero">
         <div class="container hero-inner">
+          <div
+            class="hero-media image-block reveal"
+            role="img"
+            aria-label="Barista pour with warm cafe interior"
+          >
+            <span>Image placeholder</span>
+          </div>
           <div class="hero-copy reveal">
             <p class="eyebrow">Bean and Brew</p>
             <h1>Calm coffee, curated to meet your day.</h1>
@@ -83,7 +90,7 @@
       </section>
       <!-- HERO END -->
 
-      <!-- SERVICES START -->
+      <!-- UPDATED SERVICES -->
       <section class="section services">
         <div class="container">
           <div class="section-head reveal">
@@ -94,17 +101,38 @@
             </p>
           </div>
           <div class="service-grid">
-            <article class="card service-card reveal delay-1">
+            <article class="card service-card is-featured reveal delay-1">
+              <div
+                class="service-media image-block"
+                role="img"
+                aria-label="Pre-order coffee and pastry spread"
+              >
+                <span>Image placeholder</span>
+              </div>
               <h3>Pre-order</h3>
               <p class="card-text">Build your drink and collect at your time.</p>
               <a class="btn btn-secondary" href="#">Start pre-order</a>
             </article>
             <article class="card service-card reveal delay-2">
+              <div
+                class="service-media image-block"
+                role="img"
+                aria-label="Reserved table with sunlight"
+              >
+                <span>Image placeholder</span>
+              </div>
               <h3>Book a table</h3>
               <p class="card-text">Reserve a calm corner without the wait.</p>
               <a class="btn btn-secondary" href="#">Reserve a table</a>
             </article>
             <article class="card service-card reveal delay-3">
+              <div
+                class="service-media image-block"
+                role="img"
+                aria-label="Baking lesson setup"
+              >
+                <span>Image placeholder</span>
+              </div>
               <h3>Baking lessons</h3>
               <p class="card-text">Learn pastry basics with guided tastings.</p>
               <a class="btn btn-secondary" href="#">View lessons</a>
@@ -114,28 +142,28 @@
       </section>
       <!-- SERVICES END -->
 
-      <!-- VISUAL PAUSE START -->
+      <!-- UPDATED VISUAL PAUSE -->
       <section class="pause-strip">
         <div class="container pause-inner">
-          <div class="pause-panel reveal">
-            <p class="section-label">A quiet pause</p>
-            <h2>Soft light, warm cups, and room to breathe.</h2>
-            <p class="section-lead">
-              Inspired by a slower pace and a deliberate pour.
-            </p>
-          </div>
           <div
-            class="pause-image reveal delay-1"
+            class="pause-image image-block pause-hero reveal"
             role="img"
-            aria-label="Cafe interior placeholder"
+            aria-label="Cafe interior with soft morning light"
           >
             <span>Image placeholder</span>
+            <div class="pause-overlay">
+              <p class="section-label">A quiet pause</p>
+              <h2>Soft light, warm cups, and room to breathe.</h2>
+              <p class="section-lead">
+                Inspired by a slower pace and a deliberate pour.
+              </p>
+            </div>
           </div>
         </div>
       </section>
       <!-- VISUAL PAUSE END -->
 
-      <!-- FEATURED START -->
+      <!-- UPDATED FEATURED -->
       <section class="section featured">
         <div class="container">
           <div class="section-head reveal">
@@ -145,7 +173,7 @@
           <div class="featured-grid">
             <article class="card featured-card featured-large reveal delay-1">
               <div
-                class="media"
+                class="media image-block"
                 role="img"
                 aria-label="Honey oat flat white placeholder"
               >
@@ -156,13 +184,13 @@
                 <p class="card-text">
                   Velvety espresso with toasted oat and honey.
                 </p>
-                <a class="btn btn-secondary" href="#">Add</a>
+                <a class="btn btn-text" href="#">Add</a>
               </div>
             </article>
             <div class="featured-stack">
               <article class="card featured-card reveal delay-2">
                 <div
-                  class="media"
+                  class="media image-block"
                   role="img"
                   aria-label="Matcha cloud placeholder"
                 >
@@ -176,7 +204,7 @@
               </article>
               <article class="card featured-card reveal delay-3">
                 <div
-                  class="media"
+                  class="media image-block"
                   role="img"
                   aria-label="Citrus cold brew placeholder"
                 >
@@ -194,16 +222,23 @@
       </section>
       <!-- FEATURED END -->
 
-      <!-- FINAL CTA START -->
+      <!-- UPDATED FINAL CTA -->
       <section class="final-cta">
         <div class="container final-inner reveal">
-          <div>
+          <div
+            class="final-media image-block"
+            role="img"
+            aria-label="Prepared coffee cup on the counter"
+          >
+            <span>Image placeholder</span>
+          </div>
+          <div class="final-copy">
             <h2>Ready when you are.</h2>
             <p class="section-lead">
               Order ahead and arrive to a calm, prepared cup.
             </p>
+            <a class="btn btn-primary" href="#">Pre-order now</a>
           </div>
-          <a class="btn btn-primary" href="#">Pre-order now</a>
         </div>
       </section>
       <!-- FINAL CTA END -->
