@@ -57,14 +57,14 @@
               <li class="list-item">
                 <div>
                   <p class="list-primary">Oat Milk Latte + Almond Croissant</p>
-                  <p class="list-secondary">Pickup · Today · 08:45</p>
+                  <p class="list-secondary">Collection · Today · 08:45</p>
                 </div>
                 <span class="status-pill ready">In progress</span>
               </li>
               <li class="list-item">
                 <div>
                   <p class="list-primary">Maple Cold Brew + Seasonal Loaf</p>
-                  <p class="list-secondary">Pickup · Sun · 10:15</p>
+                  <p class="list-secondary">Collection · Sun · 10:15</p>
                 </div>
                 <span class="status-pill upcoming">Scheduled</span>
               </li>
@@ -77,14 +77,14 @@
               <li class="list-item">
                 <div>
                   <p class="list-primary">Citrus Cold Brew</p>
-                  <p class="list-secondary">Yesterday · $4.90</p>
+                  <p class="list-secondary">Yesterday · £4.90</p>
                 </div>
                 <span class="status-pill completed">Completed</span>
               </li>
               <li class="list-item">
                 <div>
                   <p class="list-primary">Seasonal Matcha Cloud</p>
-                  <p class="list-secondary">Tue · $5.40</p>
+                  <p class="list-secondary">Tue · £5.40</p>
                 </div>
                 <span class="status-pill completed">Completed</span>
               </li>

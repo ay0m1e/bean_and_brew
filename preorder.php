@@ -29,7 +29,7 @@
               <p class="eyebrow">Pre-order</p>
               <h1>Pre-order</h1>
               <p class="lead">
-                Choose what you want, set a pickup window, and arrive to a calm,
+                Choose what you want, set a collection window, and arrive to a calm,
                 ready counter.
               </p>
             </div>
@@ -59,7 +59,7 @@
                       <p class="card-text">Velvety espresso with microfoam.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.80</span>
+                      <span class="product-price">£4.80</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -74,7 +74,7 @@
                       <p class="card-text">Short, balanced, and clean.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$3.90</span>
+                      <span class="product-price">£3.90</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -89,7 +89,7 @@
                       <p class="card-text">Bold espresso with hot water.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$3.60</span>
+                      <span class="product-price">£3.60</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -104,7 +104,7 @@
                       <p class="card-text">Toasted oat, soft foam.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.10</span>
+                      <span class="product-price">£5.10</span>
                       <a class="btn btn-secondary" href="#">Customize</a>
                     </div>
                   </div>
@@ -129,7 +129,7 @@
                       <p class="card-text">Black tea, cardamom, clove.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.90</span>
+                      <span class="product-price">£4.90</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -144,7 +144,7 @@
                       <p class="card-text">Dark cocoa, sea salt finish.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.40</span>
+                      <span class="product-price">£4.40</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -159,7 +159,7 @@
                       <p class="card-text">Assam, mint, or citrus herbal.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$3.30</span>
+                      <span class="product-price">£3.30</span>
                       <a class="btn btn-secondary" href="#">Customize</a>
                     </div>
                   </div>
@@ -184,7 +184,7 @@
                       <p class="card-text">Espresso, milk, slow-melt ice.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.20</span>
+                      <span class="product-price">£5.20</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -199,7 +199,7 @@
                       <p class="card-text">Slow-steeped with orange peel.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.80</span>
+                      <span class="product-price">£4.80</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -214,7 +214,7 @@
                       <p class="card-text">Sparkling, bright, softly sweet.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.40</span>
+                      <span class="product-price">£5.40</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -239,7 +239,7 @@
                       <p class="card-text">Flaky, golden, hand-laminated.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.20</span>
+                      <span class="product-price">£4.20</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -254,7 +254,7 @@
                       <p class="card-text">Brown sugar, toasted pecan.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.60</span>
+                      <span class="product-price">£4.60</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -269,7 +269,7 @@
                       <p class="card-text">Frangipane, sliced almonds.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$4.80</span>
+                      <span class="product-price">£4.80</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -284,7 +284,7 @@
                       <p class="card-text">Fruit glaze, clotted cream.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$3.80</span>
+                      <span class="product-price">£3.80</span>
                       <a class="btn btn-secondary" href="#">Customize</a>
                     </div>
                   </div>
@@ -309,7 +309,7 @@
                       <p class="card-text">Long ferment, crisp crust.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$6.20</span>
+                      <span class="product-price">£6.20</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -324,7 +324,7 @@
                       <p class="card-text">Caraway, sunflower, sesame.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$6.80</span>
+                      <span class="product-price">£6.80</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -339,7 +339,7 @@
                       <p class="card-text">Briny olives, rosemary finish.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$6.40</span>
+                      <span class="product-price">£6.40</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -364,7 +364,7 @@
                       <p class="card-text">Spiced sponge, cream cheese.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.20</span>
+                      <span class="product-price">£5.20</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -379,7 +379,7 @@
                       <p class="card-text">Dark cocoa, espresso glaze.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.80</span>
+                      <span class="product-price">£5.80</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -394,7 +394,7 @@
                       <p class="card-text">Zest, shortcrust, soft cream.</p>
                     </div>
                     <div class="product-meta">
-                      <span class="product-price">$5.10</span>
+                      <span class="product-price">£5.10</span>
                       <a class="btn btn-secondary" href="#">Add</a>
                     </div>
                   </div>
@@ -411,22 +411,22 @@
                   <p class="list-primary">Flat White</p>
                   <p class="summary-note">12 oz · Oat milk</p>
                 </div>
-                <span>$4.80</span>
+                <span>£4.80</span>
               </li>
               <li class="summary-item">
                 <div>
                   <p class="list-primary">Butter Croissant</p>
                   <p class="summary-note">Warmed</p>
                 </div>
-                <span>$4.20</span>
+                <span>£4.20</span>
               </li>
             </ul>
             <div class="summary-total">
               <span>Total</span>
-              <span>$9.00</span>
+              <span>£9.00</span>
             </div>
             <a class="btn btn-primary" href="#">Checkout</a>
-            <p class="field-help">Pickup in about 15 minutes.</p>
+            <p class="field-help">Collection in about 15 minutes.</p>
           </aside>
         </div>
       </section>

@@ -19,7 +19,7 @@
       <!-- BOOK PAGE HERO UPDATE -->
       <section class="page-hero book-hero">
         <div class="book-hero-media">
-          <img src="assets/images/hero.jpg" alt="Sunlit cafe table" />
+          <img src="assets/images/hero.jpg" alt="Sunlit café table" />
         </div>
         <div class="container book-hero-content">
           <div class="page-hero-copy">

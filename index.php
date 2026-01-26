@@ -50,7 +50,7 @@
             <article class="card service-card is-featured reveal delay-1">
               <div class="service-media image-block">
                 <img
-                  src="assets/images/hero.jpg"
+                  src="assets/images/pre-order.jpg"
                   alt="Pre-order coffee and pastry spread"
                 />
               </div>
@@ -61,7 +61,7 @@
             <article class="card service-card reveal delay-2">
               <div class="service-media image-block">
                 <img
-                  src="assets/images/hero.jpg"
+                  src="assets/images/book-table.jpg"
                   alt="Reserved table with sunlight"
                 />
               </div>
@@ -71,7 +71,7 @@
             </article>
             <article class="card service-card reveal delay-3">
               <div class="service-media image-block">
-                <img src="assets/images/hero.jpg" alt="Baking lesson setup" />
+                <img src="assets/images/baking-lesson.jpg" alt="Baking lesson setup" />
               </div>
               <h3>Baking lessons</h3>
               <p class="card-text">Learn pastry basics with guided tastings.</p>
@@ -87,8 +87,8 @@
         <div class="container pause-inner">
           <div class="pause-image image-block pause-hero reveal">
             <img
-              src="assets/images/hero.jpg"
-              alt="Cafe interior with soft morning light"
+              src="assets/images/scenery1.jpg"
+              alt="Café interior with soft morning light"
             />
             <div class="pause-overlay">
               <p class="section-label">A quiet pause</p>
@@ -113,7 +113,7 @@
             <article class="card featured-card featured-large reveal delay-1">
               <div class="media image-block">
                 <img
-                  src="assets/images/hero.jpg"
+                  src="assets/images/honey-float.png"
                   alt="Honey oat flat white"
                 />
               </div>
@@ -129,7 +129,7 @@
               <article class="card featured-card reveal delay-2">
                 <div class="media image-block">
                   <img
-                    src="assets/images/hero.jpg"
+                    src="assets/images/matcha-cloud.png"
                     alt="Seasonal matcha cloud"
                   />
                 </div>
