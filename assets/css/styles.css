@@ -632,8 +632,15 @@ h3 {
 }
 
 /* Page templates */
+/* HERO SPACING AUDIT */
+.hero,
+.page-hero,
+.page-hero-compact {
+  margin-top: 0;
+}
+
 .page-hero {
-  padding: 64px 0 40px;
+  padding: 0 0 40px;
 }
 
 .page-hero-inner {
@@ -654,7 +661,7 @@ h3 {
 }
 
 .page-hero-compact {
-  padding: 56px 0 24px;
+  padding: 0 0 24px;
 }
 
 .page-hero-compact .page-hero-inner {
@@ -682,6 +689,10 @@ h3 {
 .lessons-hero,
 .book-hero {
   padding-top: 0;
+}
+
+.lessons-hero {
+  padding-top: 24px;
 }
 
 .preorder-hero {
@@ -1121,6 +1132,60 @@ h3 {
   color: var(--text);
 }
 
+/* AUTH PAGES */
+.auth-page {
+  min-height: calc(100vh - 120px);
+}
+
+.auth-inner {
+  width: min(520px, 92%);
+  margin: 0 auto;
+}
+
+.auth-hero {
+  padding-top: 0;
+  padding-bottom: 12px;
+}
+
+.auth-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-form {
+  padding-top: 0;
+}
+
+.auth-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-card .btn {
+  width: 100%;
+}
+
+.auth-helper {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-alt {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.auth-alt a {
+  color: var(--coffee);
+  font-weight: 500;
+}
+
 /* Footer */
 .site-footer {
   padding: 36px 0 48px;
@@ -1157,9 +1222,18 @@ h3 {
 /* Responsive */
 /* MOBILE NAV BREAKPOINT */
 @media (max-width: 768px) {
+  /* MOBILE UX PASS */
+  body {
+    overflow-x: hidden;
+  }
+
   .nav-toggle-label {
     display: inline-flex;
     margin-left: auto;
+  }
+
+  .header-inner {
+    align-items: center;
   }
 
   .site-nav {
@@ -1170,6 +1244,7 @@ h3 {
     transform: translateY(-6px);
     transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
     pointer-events: none;
+    background: var(--bg);
   }
 
   .nav-toggle:checked + .nav-toggle-label + .site-nav {
@@ -1178,6 +1253,86 @@ h3 {
     transform: translateY(0);
     pointer-events: auto;
     margin-top: 10px;
+  }
+
+  .nav-list {
+    gap: 6px;
+    padding: 12px 0 8px;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 18px 10px 24px;
+  }
+
+  .nav-link::before {
+    left: 10px;
+  }
+
+  .nav-link::after {
+    right: 10px;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .hero h1,
+  .page-hero h1 {
+    font-size: clamp(2rem, 6.2vw, 2.6rem);
+    line-height: 1.12;
+  }
+
+  .hero .lead,
+  .page-hero .lead {
+    font-size: 1rem;
+  }
+
+  .hero-copy,
+  .page-hero-copy {
+    gap: 14px;
+  }
+
+  .cta-group {
+    gap: 12px;
+  }
+
+  .preorder-sections {
+    gap: 32px;
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-section {
+    padding-bottom: 4px;
+  }
+
+  .product-card {
+    gap: 10px;
+  }
+
+  .product-body {
+    padding-top: 4px;
+  }
+
+  .booking-steps {
+    padding: 20px;
+  }
+
+  .field input,
+  .field select {
+    min-height: 44px;
+  }
+
+  .lessons-grid {
+    gap: 20px;
+  }
+
+  .account-wrap {
+    gap: 20px;
   }
 }
 
@@ -1264,8 +1419,9 @@ h3 {
     padding: 72px 0 80px;
   }
 
+  /* HERO SPACING AUDIT */
   .page-hero {
-    padding: 56px 0 32px;
+    padding: 0 0 32px;
   }
 
   .page-hero-media {
@@ -1290,6 +1446,10 @@ h3 {
   .lessons-hero,
   .book-hero {
     padding-top: 0;
+  }
+
+  .lessons-hero {
+    padding-top: 20px;
   }
 
   .preorder-hero-media,
@@ -1413,8 +1573,9 @@ h3 {
     min-height: 44px;
   }
 
+  /* HERO SPACING AUDIT */
   .page-hero {
-    padding: 72px 0 48px;
+    padding: 0 0 48px;
   }
 
   /* BOOK HERO NAV GAP FIX */
@@ -1425,6 +1586,10 @@ h3 {
   /* PREORDER HERO NAV GAP FIX */
   .preorder-hero {
     padding-top: 0;
+  }
+
+  .lessons-hero {
+    padding-top: 32px;
   }
 
   .page-hero-inner {
