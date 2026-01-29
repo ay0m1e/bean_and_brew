@@ -1,3 +1,42 @@
+<?php 
+include 'header.php'; 
+
+require 'config/db.php';
+
+if (!isset ($_SESSION['user_id'])){
+  header('Location: login.php');
+  exit;
+}
+
+
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+  $userId = $_SESSION['user_id'];
+  $location = trim($_POST['location']);
+  $date = $_POST['booking_date'];
+  $time = $_POST['booking_time'];
+  $guests = (int) $_POST['guests'];
+
+  $stmt = $pdo->prepare(
+    "INSERT INTO bookings (user_id, location, booking_date, booking_time, guests)
+    VALUES (:user_id, :location, :booking_date, :booking_time, :guests)"
+  );
+
+
+$stmt->execute([
+    'user_id' => $userId,
+    'location' => $location,
+    'booking_date' => $date,
+    'booking_time' => $time,
+    'guests' => $guests
+  ]);
+
+  $bookingMessage = 'Reservation received. We will hold your table for 10 minutes.';
+  $bookingMessageType = 'success';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +52,7 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <?php include 'header.php'; ?>
+
 
     <main>
       <!-- BOOK PAGE HERO UPDATE -->
@@ -37,12 +76,17 @@
       <!-- BOOKING FORM START -->
       <section class="section booking-form">
         <div class="container">
+          <?php if (!empty($bookingMessage)) : ?>
+            <div class="message message--<?php echo htmlspecialchars($bookingMessageType ?? 'info', ENT_QUOTES, 'UTF-8'); ?>">
+              <?php echo htmlspecialchars($bookingMessage, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+          <?php endif; ?>
           <form class="booking-steps" action="#" method="post">
             <div class="form-grid">
               <div class="field">
                 <label for="location">Location</label>
-                <select id="location" name="location">
-                  <option>Select a café</option>
+                <select id="location" name="location" required>
+                  <option value="" disabled selected>Select a café</option>
                   <option>Riverside</option>
                   <option>Old Town</option>
                   <option>Market Street</option>
@@ -51,13 +95,13 @@
               </div>
               <div class="field">
                 <label for="date">Date</label>
-                <input id="date" name="date" type="date" />
+                <input id="date" name="booking_date" type="date" />
                 <p class="field-help">Reservations open up to 7 days ahead.</p>
               </div>
               <div class="field">
                 <label for="time">Time</label>
-                <select id="time" name="time">
-                  <option>Select a time</option>
+                <select id="time" name="booking_time">
+                  <option value="" disabled selected>Select a time</option>
                   <option>08:30</option>
                   <option>09:00</option>
                   <option>09:30</option>
@@ -68,7 +112,7 @@
               </div>
               <div class="field">
                 <label for="party">Party size</label>
-                <select id="party" name="party">
+                <select id="guests" name="guests">
                   <option>2 guests</option>
                   <option>3 guests</option>
                   <option>4 guests</option>
@@ -79,7 +123,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button class="btn btn-primary" type="button">Reserve table</button>
+              <button class="btn btn-primary" type="submit">Reserve table</button>
               <p class="field-help">We’ll hold your table for 10 minutes.</p>
             </div>
           </form>

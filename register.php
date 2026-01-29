@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'email' => $email,
     'password' => $hashedPassword
   ]);
+  
 
   echo 'User registered successfully';
 }

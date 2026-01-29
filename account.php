@@ -1,11 +1,27 @@
 <?php
-session_start();
+include 'header.php';
+require 'config/db.php';
 
 if (!isset($_SESSION['user_id'])){
   header('Location: login.php');
   exit;
 }
 
+$userId = $_SESSION['user_id'];
+
+
+$stmt = $pdo->prepare(
+  "SELECT location, booking_date, booking_time, guests
+  FROM bookings
+  WHERE user_id = :user_id
+  ORDER BY booking_date DESC, booking_time DESC"
+);
+
+$stmt ->execute([
+  'user_id'=> $userId
+]);
+
+$bookings = $stmt->fetchAll();
 ?>
 
 
@@ -24,7 +40,6 @@ if (!isset($_SESSION['user_id'])){
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <?php include 'header.php'; ?>
 
     <main>
       <!-- PAGE HERO START -->
@@ -39,27 +54,46 @@ if (!isset($_SESSION['user_id'])){
       </section>
       <!-- PAGE HERO END -->
 
+      <!-- BACKEND MESSAGE DISPLAY -->
+      <?php if (!empty($message)) : ?>
+        <section class="section account-message">
+          <div class="container">
+            <div class="message message--<?php echo htmlspecialchars($messageType ?? 'info', ENT_QUOTES, 'UTF-8'); ?>">
+              <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+          </div>
+        </section>
+      <?php endif; ?>
+
       <!-- ACCOUNT OVERVIEW START -->
       <section class="section account">
         <div class="container account-wrap">
           <div class="account-section">
             <h2>Upcoming bookings</h2>
-            <ul class="list-group">
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Riverside · Window table</p>
-                  <p class="list-secondary">Fri · 09:30 · Party of 2</p>
-                </div>
-                <span class="status-pill confirmed">Confirmed</span>
-              </li>
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Old Town · Community table</p>
-                  <p class="list-secondary">Sat · 11:00 · Party of 4</p>
-                </div>
-                <span class="status-pill upcoming">Upcoming</span>
-              </li>
-            </ul>
+            <!-- ACCOUNT DATA DISPLAY -->
+            <?php if (!empty($bookings) && is_array($bookings)) : ?>
+              <ul class="list-group">
+                <?php foreach ($bookings as $booking) : ?>
+                  <li class="list-item">
+                    <div>
+                      <p class="list-primary">
+                        <?php echo htmlspecialchars($booking['location'] ?? 'Location', ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                      <p class="list-secondary">
+                        <?php echo htmlspecialchars($booking['date'] ?? 'Date', ENT_QUOTES, 'UTF-8'); ?>
+                        ·
+                        <?php echo htmlspecialchars($booking['time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
+                        ·
+                        <?php echo htmlspecialchars($booking['guests'] ?? 'Guests', ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                    </div>
+                    <span class="status-pill confirmed">Confirmed</span>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php else : ?>
+              <p class="empty-state">No upcoming bookings yet.</p>
+            <?php endif; ?>
           </div>
 
           <div class="account-section">

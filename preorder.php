@@ -1,3 +1,18 @@
+<?php
+include 'header.php';
+require 'config/db.php';
+
+if(empty($_SESSION['cart'])){
+  die('Your cart is empty');
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+  $userId = $_SESSION['user_id'];
+  $collectionTime = $_POST['collection_time'];
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,9 +28,6 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <?php include 'header.php'; ?>
-
-
     <main class="preorder-page">
       <!-- PRE-ORDER HERO VARIATION -->
       <section class="page-hero preorder-hero">
