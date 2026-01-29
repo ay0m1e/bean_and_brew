@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.php" aria-label="Bean and Brew homepage">
@@ -23,7 +27,13 @@
         <li><a class="nav-link" href="book.php">Book</a></li>
         <li><a class="nav-link" href="preorder.php">Pre-order</a></li>
         <li><a class="nav-link" href="lessons.php">Lessons</a></li>
-        <li><a class="nav-link" href="account.php">Account</a></li>
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <li><a class="nav-link" href="account.php">Account</a></li>
+          <li><a class="nav-link" href="logout.php">Log out</a></li>
+
+        <?php else: ?>
+          <li><a class="nav-link" href="login.php">Sign in</a></li>
+        <?php endif; ?>
       </ul>
     </nav>
   </div>

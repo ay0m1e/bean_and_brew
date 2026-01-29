@@ -1,3 +1,50 @@
+<?php
+require 'config/db.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $name = trim($_POST['full_name']);
+  $email = trim($_POST['email']);
+  $password = $_POST['password'];
+  $confirmPassword = $_POST['confirm_password'];
+  
+
+  if ($password !== $confirmPassword){
+    die('Passwords do not match');
+  }
+
+  $checkStmt = $pdo->prepare(
+    "SELECT id FROM users WHERE email = :email LIMIT 1"
+  );
+
+  $checkStmt -> execute([
+    'email' => $email
+  ]);
+
+  if ($checkStmt->fetch()){
+    die('An account with this email already exists');
+  }
+
+  $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+  $stmt = $pdo->prepare(
+    "INSERT INTO users(name, email, password)
+    VALUES (:name, :email, :password)"
+  );
+
+  $stmt->execute([
+    'name' => $name,
+    'email' => $email,
+    'password' => $hashedPassword
+  ]);
+
+  echo 'User registered successfully';
+}
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>

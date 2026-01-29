@@ -1,3 +1,38 @@
+<?php
+require 'config/db.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+  $email = trim($_POST['email']);
+  $password = $_POST['password'];
+
+
+  $stmt = $pdo->prepare(
+    "SELECT id, password FROM users WHERE email = :email LIMIT 1"
+  );
+
+  $stmt->execute([
+    'email' => $email
+  ]);
+
+  $user = $stmt -> fetch();
+
+  if (!$user) {
+    die ('Invalid email or password');
+  }
+
+  if (!password_verify($password, $user['password'])){
+    die('Invalid email or password');
+  }
+
+  session_start();
+  $_SESSION['user_id'] = $user['id'];
+
+  echo 'Login successful';
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
