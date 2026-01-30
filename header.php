@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+$cartCount = 0;
+if (!empty($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+  foreach ($_SESSION['cart'] as $item) {
+    $cartCount += (int) ($item['quantity'] ?? 0);
+  }
+}
 ?>
 
 <header class="site-header">
@@ -34,7 +41,42 @@ session_start();
         <?php else: ?>
           <li><a class="nav-link" href="login.php">Sign in</a></li>
         <?php endif; ?>
+        <!-- CART ICON -->
+        <li class="nav-cart-item">
+          <a class="header-cart" href="preorder.php" aria-label="View cart">
+            <span class="header-cart-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                <path d="M6 6h15l-1.5 9h-12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                <circle cx="9" cy="19" r="1.6" fill="currentColor"/>
+                <circle cx="18" cy="19" r="1.6" fill="currentColor"/>
+                <path d="M6 6l-1-3H2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <?php if ($cartCount > 0): ?>
+              <span class="cart-badge"><?php echo (int) $cartCount; ?></span>
+            <?php endif; ?>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
 </header>
+
+<!-- FLASH MESSAGES -->
+<?php if (!empty($_SESSION['flash_success']) || !empty($_SESSION['flash_error'])): ?>
+  <div class="flash-wrap">
+    <?php if (!empty($_SESSION['flash_success'])): ?>
+      <div class="flash flash-success">
+        <?php echo htmlspecialchars($_SESSION['flash_success'], ENT_QUOTES, 'UTF-8'); ?>
+      </div>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['flash_error'])): ?>
+      <div class="flash flash-error">
+        <?php echo htmlspecialchars($_SESSION['flash_error'], ENT_QUOTES, 'UTF-8'); ?>
+      </div>
+    <?php endif; ?>
+  </div>
+  <?php
+    unset($_SESSION['flash_success'], $_SESSION['flash_error']);
+  ?>
+<?php endif; ?>

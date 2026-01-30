@@ -133,5 +133,39 @@ $stmt->execute([
     </main>
 
     <?php include 'footer.php'; ?>
+
+    <script>
+      (function () {
+        const dateInput = document.getElementById('date');
+        const timeSelect = document.getElementById('time');
+        if (!dateInput || !timeSelect) return;
+
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+
+        dateInput.min = todayStr;
+        if (!dateInput.value) dateInput.value = todayStr;
+
+        function updateTimes() {
+          const isToday = dateInput.value === todayStr;
+          const currentMinutes = now.getHours() * 60 + now.getMinutes();
+          Array.from(timeSelect.options).forEach((opt) => {
+            if (!opt.value) return;
+            const [h, m] = opt.value.split(':').map(Number);
+            const optMinutes = h * 60 + m;
+            opt.disabled = isToday && optMinutes <= currentMinutes;
+          });
+          if (timeSelect.options[timeSelect.selectedIndex]?.disabled) {
+            timeSelect.selectedIndex = 0;
+          }
+        }
+
+        dateInput.addEventListener('change', updateTimes);
+        updateTimes();
+      })();
+    </script>
   </body>
 </html>

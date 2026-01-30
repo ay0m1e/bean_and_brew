@@ -1,3 +1,79 @@
+<?php
+require 'config/db.php';
+include 'header.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['flash_error'] = 'Please sign in to book a lesson.';
+    header('Location: login.php');
+    exit;
+  }
+
+  $lessonId = (int) ($_POST['lesson_id'] ?? 0);
+  if ($lessonId <= 0) {
+    $_SESSION['flash_error'] = 'Invalid lesson selection.';
+    header('Location: lessons.php');
+    exit;
+  }
+
+  $stmt = $pdo->prepare("SELECT capacity FROM lessons WHERE id = :id");
+  $stmt->execute(['id' => $lessonId]);
+  $lesson = $stmt->fetch();
+
+  if (!$lesson) {
+    $_SESSION['flash_error'] = 'Lesson not found.';
+    header('Location: lessons.php');
+    exit;
+  }
+
+  $stmt = $pdo->prepare(
+    "SELECT COUNT(*) FROM lesson_bookings WHERE lesson_id = :lesson_id"
+  );
+  $stmt->execute(['lesson_id' => $lessonId]);
+  $bookedCount = (int) $stmt->fetchColumn();
+
+  if ($bookedCount >= (int) $lesson['capacity']) {
+    $_SESSION['flash_error'] = 'This lesson is fully booked.';
+    header('Location: lessons.php');
+    exit;
+  }
+
+  $stmt = $pdo->prepare(
+    "SELECT 1 FROM lesson_bookings WHERE user_id = :user_id AND lesson_id = :lesson_id"
+  );
+  $stmt->execute([
+    'user_id' => $_SESSION['user_id'],
+    'lesson_id' => $lessonId
+  ]);
+
+  if ($stmt->fetchColumn()) {
+    $_SESSION['flash_error'] = 'You have already booked this lesson.';
+    header('Location: lessons.php');
+    exit;
+  }
+
+  $stmt = $pdo->prepare(
+    "INSERT INTO lesson_bookings (user_id, lesson_id) VALUES (:user_id, :lesson_id)"
+  );
+  $stmt->execute([
+    'user_id' => $_SESSION['user_id'],
+    'lesson_id' => $lessonId
+  ]);
+
+  $_SESSION['flash_success'] = 'Lesson booked successfully.';
+  header('Location: lessons.php');
+  exit;
+}
+
+$stmt = $pdo->prepare(
+  "SELECT id, title, lesson_date, lesson_time, capacity
+  FROM lessons
+  ORDER BY lesson_date ASC, lesson_time ASC"
+);
+$stmt->execute();
+$lessons = $stmt->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +89,7 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <?php include 'header.php'; ?>
+
 
     <main>
       <!-- LESSONS HERO VARIATION -->
@@ -33,58 +109,49 @@
       </section>
       <!-- PAGE HERO END -->
 
-      <!-- LESSONS START -->
+      <!-- DYNAMIC LESSONS START -->
       <section class="section lessons">
         <div class="container">
           <div class="lessons-grid">
-            <article class="lesson-card">
-              <div class="lesson-media image-block">
-                <img src="assets/images/hero1.jpg" alt="Sourdough lesson" />
-              </div>
-              <div class="lesson-body">
-                <h3>Sourdough Essentials</h3>
-                <div class="lesson-meta">
-                  <span>Sat · 10:00</span>
-                  <span class="status-pill available">Spaces open</span>
-                </div>
-                <p class="card-text">Starter care, shaping, and scoring.</p>
-                <a class="btn btn-secondary" href="#">Book lesson</a>
-              </div>
-            </article>
-
-            <article class="lesson-card">
-              <div class="lesson-media image-block">
-                <img src="assets/images/hero1.jpg" alt="Pastry folding" />
-              </div>
-              <div class="lesson-body">
-                <h3>Viennoiserie Morning</h3>
-                <div class="lesson-meta">
-                  <span>Sun · 13:30</span>
-                  <span class="status-pill limited">Limited spots</span>
-                </div>
-                <p class="card-text">Butter layering, proofing, and glazing.</p>
-                <a class="btn btn-secondary" href="#">Book lesson</a>
-              </div>
-            </article>
-
-            <article class="lesson-card">
-              <div class="lesson-media image-block">
-                <img src="assets/images/hero1.jpg" alt="Seasonal cakes" />
-              </div>
-              <div class="lesson-body">
-                <h3>Seasonal Cakes</h3>
-                <div class="lesson-meta">
-                  <span>Fri · 17:00</span>
-                  <span class="status-pill available">Spaces open</span>
-                </div>
-                <p class="card-text">Sponge basics, fillings, and finish.</p>
-                <a class="btn btn-secondary" href="#">Book lesson</a>
-              </div>
-            </article>
+            <?php if (!empty($lessons)) : ?>
+              <?php foreach ($lessons as $lesson) : ?>
+                <?php
+                  $lessonDate = $lesson['lesson_date'] ?? '';
+                  $lessonTime = $lesson['lesson_time'] ?? '';
+                  $dateLabel = $lessonDate ? date('D', strtotime($lessonDate)) : 'Day';
+                  $timeLabel = $lessonTime ? date('H:i', strtotime($lessonTime)) : 'Time';
+                  $capacity = (int) ($lesson['capacity'] ?? 0);
+                  $statusClass = $capacity > 0 && $capacity <= 8 ? 'limited' : 'available';
+                  $statusLabel = $statusClass === 'limited' ? 'Limited spots' : 'Spaces open';
+                ?>
+                <article class="lesson-card">
+                  <div class="lesson-media image-block">
+                    <img
+                      src="assets/images/hero1.jpg"
+                      alt="<?php echo htmlspecialchars($lesson['title'] ?? 'Lesson', ENT_QUOTES, 'UTF-8'); ?>"
+                    />
+                  </div>
+                  <div class="lesson-body">
+                    <h3><?php echo htmlspecialchars($lesson['title'] ?? 'Lesson', ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <div class="lesson-meta">
+                      <span><?php echo htmlspecialchars($dateLabel, ENT_QUOTES, 'UTF-8'); ?> · <?php echo htmlspecialchars($timeLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                      <span class="status-pill <?php echo $statusClass; ?>"><?php echo $statusLabel; ?></span>
+                    </div>
+                    <p class="card-text">Small group lesson with a calm, guided pace.</p>
+                    <form method="post" action="lessons.php">
+                      <input type="hidden" name="lesson_id" value="<?php echo (int) ($lesson['id'] ?? 0); ?>" />
+                      <button class="btn btn-secondary" type="submit">Book lesson</button>
+                    </form>
+                  </div>
+                </article>
+              <?php endforeach; ?>
+            <?php else : ?>
+              <p class="empty-state">No lessons are currently available.</p>
+            <?php endif; ?>
           </div>
         </div>
       </section>
-      <!-- LESSONS END -->
+      <!-- DYNAMIC LESSONS END -->
     </main>
 
     <?php include 'footer.php'; ?>

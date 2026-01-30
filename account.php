@@ -9,6 +9,30 @@ if (!isset($_SESSION['user_id'])){
 
 $userId = $_SESSION['user_id'];
 
+$stmt = $pdo->prepare(
+    "SELECT id, collection_time, created_at
+    FROM orders
+    WHERE user_id = :user_id
+    ORDER BY created_at DESC"
+);
+
+$stmt->execute([
+    'user_id' => $_SESSION['user_id']
+]);
+
+$orders = $stmt->fetchAll();
+
+$stmt = $pdo->prepare(
+  "SELECT l.title, l.lesson_date, l.lesson_time
+  FROM lesson_bookings lb
+  INNER JOIN lessons l ON l.id = lb.lesson_id
+  WHERE lb.user_id = :user_id
+  ORDER BY l.lesson_date DESC, l.lesson_time DESC"
+);
+$stmt->execute([
+  'user_id' => $userId
+]);
+$lessonsBooked = $stmt->fetchAll();
 
 $stmt = $pdo->prepare(
   "SELECT location, booking_date, booking_time, guests
@@ -96,45 +120,95 @@ $bookings = $stmt->fetchAll();
             <?php endif; ?>
           </div>
 
+          <!-- ORDERS SECTION START -->
           <div class="account-section">
-            <h2>Upcoming pre-orders</h2>
-            <ul class="list-group">
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Oat Milk Latte + Almond Croissant</p>
-                  <p class="list-secondary">Collection · Today · 08:45</p>
+            <h2>Your orders</h2>
+            <?php if (!empty($orders)) : ?>
+              <?php foreach ($orders as $order) : ?>
+                <?php
+                  $orderId = (int) ($order['id'] ?? 0);
+                  $itemsStmt = $pdo->prepare(
+                    "SELECT product_name, quantity, price
+                    FROM order_items
+                    WHERE order_id = :order_id"
+                  );
+                  $itemsStmt->execute(['order_id' => $orderId]);
+                  $orderItems = $itemsStmt->fetchAll();
+                  $orderTotal = 0;
+                ?>
+                <div class="list-group">
+                  <div class="list-item">
+                    <div>
+                      <p class="list-primary">
+                        <?php
+                          $date = $order['created_at'] ?? '';
+                          $dateLabel = $date ? date('M j, Y', strtotime($date)) : 'Order date';
+                          echo htmlspecialchars($dateLabel, ENT_QUOTES, 'UTF-8');
+                        ?>
+                      </p>
+                      <p class="list-secondary">
+                        Collection · <?php echo htmlspecialchars($order['collection_time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                    </div>
+                  </div>
+                  <?php foreach ($orderItems as $item) : ?>
+                    <?php
+                      $qty = (int) ($item['quantity'] ?? 1);
+                      $price = (float) ($item['price'] ?? 0);
+                      $lineTotal = $qty * $price;
+                      $orderTotal += $lineTotal;
+                    ?>
+                    <div class="list-item">
+                      <div>
+                        <p class="list-primary"><?php echo htmlspecialchars($item['product_name'] ?? 'Item', ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p class="list-secondary">Qty <?php echo $qty; ?></p>
+                      </div>
+                      <span>£<?php echo number_format($lineTotal, 2); ?></span>
+                    </div>
+                  <?php endforeach; ?>
+                  <div class="list-item">
+                    <div>
+                      <p class="list-primary">Total</p>
+                    </div>
+                    <span>£<?php echo number_format($orderTotal, 2); ?></span>
+                  </div>
                 </div>
-                <span class="status-pill ready">In progress</span>
-              </li>
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Maple Cold Brew + Seasonal Loaf</p>
-                  <p class="list-secondary">Collection · Sun · 10:15</p>
-                </div>
-                <span class="status-pill upcoming">Scheduled</span>
-              </li>
-            </ul>
+              <?php endforeach; ?>
+            <?php else : ?>
+              <p class="empty-state">You haven’t placed any orders yet.</p>
+            <?php endif; ?>
           </div>
+          <!-- ORDERS SECTION END -->
 
-          <details class="account-section history">
-            <summary>Past orders</summary>
-            <ul class="list-group">
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Citrus Cold Brew</p>
-                  <p class="list-secondary">Yesterday · £4.90</p>
-                </div>
-                <span class="status-pill completed">Completed</span>
-              </li>
-              <li class="list-item">
-                <div>
-                  <p class="list-primary">Seasonal Matcha Cloud</p>
-                  <p class="list-secondary">Tue · £5.40</p>
-                </div>
-                <span class="status-pill completed">Completed</span>
-              </li>
-            </ul>
-          </details>
+          <!-- LESSONS SECTION START -->
+          <div class="account-section">
+            <h2>Your lessons</h2>
+            <?php if (!empty($lessonsBooked)) : ?>
+              <ul class="list-group">
+                <?php foreach ($lessonsBooked as $lesson) : ?>
+                  <li class="list-item">
+                    <div>
+                      <p class="list-primary">
+                        <?php echo htmlspecialchars($lesson['title'] ?? 'Lesson', ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                      <p class="list-secondary">
+                        <?php
+                          $lessonDate = $lesson['lesson_date'] ?? '';
+                          $lessonDateLabel = $lessonDate ? date('M j, Y', strtotime($lessonDate)) : 'Date';
+                          echo htmlspecialchars($lessonDateLabel, ENT_QUOTES, 'UTF-8');
+                        ?>
+                        ·
+                        <?php echo htmlspecialchars($lesson['lesson_time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                    </div>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php else : ?>
+              <p class="empty-state">You haven’t placed any orders yet.</p>
+            <?php endif; ?>
+          </div>
+          <!-- LESSONS SECTION END -->
         </div>
       </section>
       <!-- ACCOUNT OVERVIEW END -->

@@ -2,13 +2,54 @@
 include 'header.php';
 require 'config/db.php';
 
-if(empty($_SESSION['cart'])){
-  die('Your cart is empty');
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
   $userId = $_SESSION['user_id'];
+
+  if (!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+    exit;
+  }
+
+  if(empty($_SESSION['cart'])){
+    die('Your cart is empty');
+  }
+
+  
   $collectionTime = $_POST['collection_time'];
+
+
+  $stmt = $pdo->prepare(
+    "INSERT INTO orders (user_id, collection_time)
+    VALUES (:user_id, :collection_time)"
+  );
+
+  $stmt->execute([
+  'user_id' => $userId,
+  'collection_time' => $collectionTime
+  ]);
+
+  $orderId = $pdo->lastInsertId();
+
+
+  $itemStmt = $pdo->prepare(
+    "INSERT INTO order_items (order_id, product_name, quantity, price)
+    VALUE (:order_id, :product_name, :quantity, :price)"
+  );
+
+  foreach ($_SESSION ['cart'] as $item) {
+    $itemStmt -> execute([
+      'order_id' => $orderId,
+      'product_name' => $item['product_name'],
+      'quantity' => (int)$item['quantity'],
+      'price' => (float) $item['price']
+    ]);
+  }
+
+
+  unset($_SESSION['cart']);
+
+  echo 'Order placed successfully';
 }
 ?>
 
@@ -61,7 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Espresso-led classics for a focused start.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="flat-white" />
+                  <input type="hidden" name="product_name" value="Flat White" />
+                  <input type="hidden" name="price" value="4.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Flat white" />
                   </div>
@@ -72,11 +117,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.80</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="cortado" />
+                  <input type="hidden" name="product_name" value="Cortado" />
+                  <input type="hidden" name="price" value="3.90" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Cortado" />
                   </div>
@@ -87,11 +142,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£3.90</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="long-black" />
+                  <input type="hidden" name="product_name" value="Long Black" />
+                  <input type="hidden" name="price" value="3.60" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Long black" />
                   </div>
@@ -102,11 +167,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£3.60</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="oat-cappuccino" />
+                  <input type="hidden" name="product_name" value="Oat Cappuccino" />
+                  <input type="hidden" name="price" value="5.10" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Oat cappuccino" />
                   </div>
@@ -117,10 +192,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.10</span>
-                      <a class="btn btn-secondary" href="#">Customize</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
 
@@ -131,7 +212,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Slow pours, warm spices, calm cups.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="chai-latte" />
+                  <input type="hidden" name="product_name" value="Chai Latte" />
+                  <input type="hidden" name="price" value="4.90" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Chai latte" />
                   </div>
@@ -142,11 +227,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.90</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="hot-chocolate" />
+                  <input type="hidden" name="product_name" value="Hot Chocolate" />
+                  <input type="hidden" name="price" value="4.40" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Hot chocolate" />
                   </div>
@@ -157,11 +252,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.40</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="brewed-tea" />
+                  <input type="hidden" name="product_name" value="Brewed Tea" />
+                  <input type="hidden" name="price" value="3.30" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Brewed tea" />
                   </div>
@@ -172,10 +277,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£3.30</span>
-                      <a class="btn btn-secondary" href="#">Customize</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
 
@@ -186,7 +297,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Bright, chilled, and layered.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="iced-latte" />
+                  <input type="hidden" name="product_name" value="Iced Latte" />
+                  <input type="hidden" name="price" value="5.20" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Iced latte" />
                   </div>
@@ -197,11 +312,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.20</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="citrus-cold-brew" />
+                  <input type="hidden" name="product_name" value="Citrus Cold Brew" />
+                  <input type="hidden" name="price" value="4.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Citrus cold brew" />
                   </div>
@@ -212,11 +337,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.80</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="matcha-tonic" />
+                  <input type="hidden" name="product_name" value="Matcha Tonic" />
+                  <input type="hidden" name="price" value="5.40" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Matcha tonic" />
                   </div>
@@ -227,10 +362,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.40</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
 
@@ -241,7 +382,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Buttery layers and warm spice.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="butter-croissant" />
+                  <input type="hidden" name="product_name" value="Butter Croissant" />
+                  <input type="hidden" name="price" value="4.20" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Butter croissant" />
                   </div>
@@ -252,11 +397,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.20</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="cinnamon-bun" />
+                  <input type="hidden" name="product_name" value="Cinnamon Bun" />
+                  <input type="hidden" name="price" value="4.60" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Cinnamon bun" />
                   </div>
@@ -267,11 +422,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.60</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="almond-danish" />
+                  <input type="hidden" name="product_name" value="Almond Danish" />
+                  <input type="hidden" name="price" value="4.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Almond danish" />
                   </div>
@@ -282,11 +447,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£4.80</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="seasonal-scone" />
+                  <input type="hidden" name="product_name" value="Seasonal Scone" />
+                  <input type="hidden" name="price" value="3.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Seasonal scone" />
                   </div>
@@ -297,10 +472,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£3.80</span>
-                      <a class="btn btn-secondary" href="#">Customize</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
 
@@ -311,7 +492,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Fresh loaves for daily tables.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="sourdough-loaf" />
+                  <input type="hidden" name="product_name" value="Sourdough Loaf" />
+                  <input type="hidden" name="price" value="6.20" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Sourdough loaf" />
                   </div>
@@ -322,11 +507,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£6.20</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="seeded-rye" />
+                  <input type="hidden" name="product_name" value="Seeded Rye" />
+                  <input type="hidden" name="price" value="6.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Seeded rye" />
                   </div>
@@ -337,11 +532,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£6.80</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="olive-loaf" />
+                  <input type="hidden" name="product_name" value="Olive Loaf" />
+                  <input type="hidden" name="price" value="6.40" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Olive loaf" />
                   </div>
@@ -352,10 +557,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£6.40</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
 
@@ -366,7 +577,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <p class="section-lead">Slices and whole cakes for the table.</p>
               </div>
               <div class="category-grid">
-                <article class="product-card">
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="carrot-cake" />
+                  <input type="hidden" name="product_name" value="Carrot Cake" />
+                  <input type="hidden" name="price" value="5.20" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Carrot cake" />
                   </div>
@@ -377,11 +592,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.20</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="chocolate-torte" />
+                  <input type="hidden" name="product_name" value="Chocolate Torte" />
+                  <input type="hidden" name="price" value="5.80" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Chocolate torte" />
                   </div>
@@ -392,11 +617,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.80</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
-                <article class="product-card">
+                </form>
+                <!-- ADD TO CART FORM -->
+                <form class="product-card" action="cart-add.php" method="post">
+                  <input type="hidden" name="product_key" value="lemon-tart" />
+                  <input type="hidden" name="product_name" value="Lemon Tart" />
+                  <input type="hidden" name="price" value="5.10" />
                   <div class="product-media image-block">
                     <img src="assets/images/hero.jpg" alt="Lemon tart" />
                   </div>
@@ -407,40 +642,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     </div>
                     <div class="product-meta">
                       <span class="product-price">£5.10</span>
-                      <a class="btn btn-secondary" href="#">Add</a>
+                      <!-- CART QUANTITY CONTROL -->
+                      <div class="qty-control">
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=Math.max(1, parseInt(input.value || 1, 10) - 1);">-</button>
+                        <input class="qty-input" type="number" name="quantity" value="1" min="1" readonly />
+                        <button class="qty-btn" type="button" onclick="const input=this.parentNode.querySelector('input'); input.value=parseInt(input.value || 1, 10) + 1;">+</button>
+                      </div>
+                      <button class="btn btn-secondary btn-cart" type="submit">Add to cart</button>
                     </div>
                   </div>
-                </article>
+                </form>
               </div>
             </section>
           </div>
 
-          <aside class="order-summary">
-            <h3>Your order</h3>
-            <ul class="summary-list">
-              <li class="summary-item">
-                <div>
-                  <p class="list-primary">Flat White</p>
-                  <p class="summary-note">12 oz · Oat milk</p>
+          <!-- CHECKOUT UI -->
+          <?php $cartItems = $_SESSION['cart'] ?? []; ?>
+          <?php if (!empty($cartItems)) : ?>
+            <?php
+              $cartTotal = 0;
+              $itemCount = 0;
+              foreach ($cartItems as $item) {
+                $qty = (int) ($item['quantity'] ?? 1);
+                $price = (float) ($item['price'] ?? 0);
+                $cartTotal += ($qty * $price);
+                $itemCount += $qty;
+              }
+            ?>
+            <aside class="order-summary">
+              <h3>Your order</h3>
+              <!-- COLLAPSIBLE ORDER SUMMARY -->
+              <ul class="summary-list">
+                <?php foreach ($cartItems as $item) : ?>
+                  <?php
+                    $qty = (int) ($item['quantity'] ?? 1);
+                    $price = (float) ($item['price'] ?? 0);
+                    $lineTotal = $qty * $price;
+                  ?>
+                  <li class="summary-item">
+                    <div>
+                      <p class="list-primary"><?php echo htmlspecialchars($item['product_name'] ?? 'Item', ENT_QUOTES, 'UTF-8'); ?></p>
+                      <p class="summary-note">Qty <?php echo $qty; ?></p>
+                    </div>
+                    <span class="summary-line">£<?php echo number_format($lineTotal, 2); ?></span>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+              <div class="summary-total">
+                <span>Total</span>
+                <span>£<?php echo number_format($cartTotal, 2); ?></span>
+              </div>
+              <form id="checkout-form" class="checkout-form" method="post" action="checkout.php">
+                <div class="checkout-field">
+                  <label for="collection-time">Collection time</label>
+                  <input id="collection-time" name="collection_time" type="time" required />
                 </div>
-                <span>£4.80</span>
-              </li>
-              <li class="summary-item">
-                <div>
-                  <p class="list-primary">Butter Croissant</p>
-                  <p class="summary-note">Warmed</p>
-                </div>
-                <span>£4.20</span>
-              </li>
-            </ul>
-            <div class="summary-total">
-              <span>Total</span>
-              <span>£9.00</span>
+                <button class="btn btn-primary" type="submit">Checkout</button>
+              </form>
+              <p class="field-help">Collection in about 15 minutes.</p>
+            </aside>
+          <?php else : ?>
+            <div class="order-empty">
+              <p class="empty-state">Your cart is empty. Add items to continue.</p>
             </div>
-            <a class="btn btn-primary" href="#">Checkout</a>
-            <p class="field-help">Collection in about 15 minutes.</p>
-          </aside>
+          <?php endif; ?>
         </div>
+        <?php if (!empty($cartItems)) : ?>
+          <!-- MOBILE CHECKOUT BAR -->
+          <div class="order-bar">
+            <!-- ORDER DETAILS TOGGLE -->
+            <div class="order-details-toggle">
+              <details class="summary-details">
+                <summary class="summary-toggle">
+                  <span class="summary-toggle-show">View order details</span>
+                  <span class="summary-toggle-hide">Hide order details</span>
+                </summary>
+                <!-- COLLAPSIBLE ORDER SUMMARY -->
+                <div class="summary-panel">
+                  <ul class="summary-list">
+                    <?php foreach ($cartItems as $item) : ?>
+                      <?php
+                        $qty = (int) ($item['quantity'] ?? 1);
+                        $price = (float) ($item['price'] ?? 0);
+                        $lineTotal = $qty * $price;
+                      ?>
+                      <li class="summary-item">
+                        <div>
+                          <p class="list-primary"><?php echo htmlspecialchars($item['product_name'] ?? 'Item', ENT_QUOTES, 'UTF-8'); ?></p>
+                          <p class="summary-note">Qty <?php echo $qty; ?></p>
+                        </div>
+                        <span class="summary-line">£<?php echo number_format($lineTotal, 2); ?></span>
+                      </li>
+                    <?php endforeach; ?>
+                  </ul>
+                </div>
+              </details>
+            </div>
+            <div class="order-bar-summary">
+              <p class="summary-label"><?php echo $itemCount; ?> items</p>
+              <p class="summary-value">£<?php echo number_format($cartTotal, 2); ?></p>
+            </div>
+            <form class="checkout-form checkout-form-bar" method="post" action="checkout.php">
+              <label class="sr-only" for="collection-time-bar">Collection time</label>
+              <input
+                id="collection-time-bar"
+                class="order-time-input"
+                name="collection_time"
+                type="time"
+                required
+              />
+              <button class="btn btn-primary" type="submit">Checkout</button>
+            </form>
+          </div>
+        <?php endif; ?>
       </section>
       <!-- PRE-ORDER CATEGORIES END -->
     </main>
