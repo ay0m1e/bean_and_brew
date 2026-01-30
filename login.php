@@ -1,13 +1,26 @@
 <?php
 require 'config/db.php';
+require 'config/validate.php';
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-  $email = trim($_POST['email']);
-  $password = $_POST['password'];
+  $email = sanitize_text($_POST['email'] ?? '');
+  $password = $_POST['password'] ?? '';
 
+  if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $_SESSION['flash_error'] = 'Please enter a valid email address.';
+    header('Location: login.php');
+    exit;
+  }
+
+  if (empty($password)) {
+    $_SESSION['flash_error'] = 'Please enter your password.';
+    header('Location: login.php');
+    exit;
+  }
 
   $stmt = $pdo->prepare(
-    "SELECT id, password FROM users WHERE email = :email LIMIT 1"
+    "SELECT id, password, role FROM users WHERE email = :email LIMIT 1"
   );
 
   $stmt->execute([
@@ -17,18 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
   $user = $stmt -> fetch();
 
   if (!$user) {
-    die ('Invalid email or password');
+    $_SESSION['flash_error'] = 'Invalid email or password.';
+    header('Location: login.php');
+    exit;
   }
 
   if (!password_verify($password, $user['password'])){
-    die('Invalid email or password');
+    $_SESSION['flash_error'] = 'Invalid email or password.';
+    header('Location: login.php');
+    exit;
   }
-  session_start();
   $_SESSION['user_id'] = $user['id'];
+  $_SESSION['role'] = $user['role'] ?? 'customer';
 
-  echo 'Login successful';
-
+  $_SESSION['flash_success'] = 'Signed in successfully.';
   header('Location: index.php');
+  exit;
 }
 
 ?>
@@ -68,6 +85,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
       </div>
     </header>
     <!-- HEADER END -->
+
+    <!-- FLASH MESSAGES -->
+    <?php if (!empty($_SESSION['flash_success']) || !empty($_SESSION['flash_error'])): ?>
+      <div class="flash-wrap">
+        <?php if (!empty($_SESSION['flash_success'])): ?>
+          <div class="flash flash-success">
+            <?php echo htmlspecialchars($_SESSION['flash_success'], ENT_QUOTES, 'UTF-8'); ?>
+          </div>
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['flash_error'])): ?>
+          <div class="flash flash-error">
+            <?php echo htmlspecialchars($_SESSION['flash_error'], ENT_QUOTES, 'UTF-8'); ?>
+          </div>
+        <?php endif; ?>
+      </div>
+      <?php
+        unset($_SESSION['flash_success'], $_SESSION['flash_error']);
+      ?>
+    <?php endif; ?>
 
     <main class="auth-page">
       <!-- AUTH INTRO START -->

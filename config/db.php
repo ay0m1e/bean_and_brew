@@ -16,5 +16,5 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch(PDOException $e) {
-    die ("DAtabase connection failed: ". $e ->getMessage());
+    die("Something went wrong. Please try again.");
 }

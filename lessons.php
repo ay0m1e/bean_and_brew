@@ -1,8 +1,15 @@
 <?php
 require 'config/db.php';
+require 'config/validate.php';
 include 'header.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+    $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
+    header('Location: lessons.php');
+    exit;
+  }
+
   if (!isset($_SESSION['user_id'])) {
     $_SESSION['flash_error'] = 'Please sign in to book a lesson.';
     header('Location: login.php');
@@ -16,53 +23,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
   }
 
-  $stmt = $pdo->prepare("SELECT capacity FROM lessons WHERE id = :id");
-  $stmt->execute(['id' => $lessonId]);
-  $lesson = $stmt->fetch();
+  try {
+    $pdo->beginTransaction();
 
-  if (!$lesson) {
-    $_SESSION['flash_error'] = 'Lesson not found.';
+    $stmt = $pdo->prepare("SELECT capacity FROM lessons WHERE id = :id");
+    $stmt->execute(['id' => $lessonId]);
+    $lesson = $stmt->fetch();
+
+    if (!$lesson) {
+      $pdo->rollBack();
+      $_SESSION['flash_error'] = 'Lesson not found.';
+      header('Location: lessons.php');
+      exit;
+    }
+
+    $stmt = $pdo->prepare(
+      "SELECT COUNT(*) FROM lesson_bookings WHERE lesson_id = :lesson_id"
+    );
+    $stmt->execute(['lesson_id' => $lessonId]);
+    $bookedCount = (int) $stmt->fetchColumn();
+
+    if ($bookedCount >= (int) $lesson['capacity']) {
+      $pdo->rollBack();
+      $_SESSION['flash_error'] = 'This lesson is fully booked.';
+      header('Location: lessons.php');
+      exit;
+    }
+
+    $stmt = $pdo->prepare(
+      "SELECT 1 FROM lesson_bookings WHERE user_id = :user_id AND lesson_id = :lesson_id"
+    );
+    $stmt->execute([
+      'user_id' => $_SESSION['user_id'],
+      'lesson_id' => $lessonId
+    ]);
+
+    if ($stmt->fetchColumn()) {
+      $pdo->rollBack();
+      $_SESSION['flash_error'] = 'You have already booked this lesson.';
+      header('Location: lessons.php');
+      exit;
+    }
+
+    $stmt = $pdo->prepare(
+      "INSERT INTO lesson_bookings (user_id, lesson_id) VALUES (:user_id, :lesson_id)"
+    );
+    $stmt->execute([
+      'user_id' => $_SESSION['user_id'],
+      'lesson_id' => $lessonId
+    ]);
+
+    $pdo->commit();
+    $_SESSION['flash_success'] = 'Lesson booked successfully.';
+    header('Location: lessons.php');
+    exit;
+  } catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+      $pdo->rollBack();
+    }
+    $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
     header('Location: lessons.php');
     exit;
   }
-
-  $stmt = $pdo->prepare(
-    "SELECT COUNT(*) FROM lesson_bookings WHERE lesson_id = :lesson_id"
-  );
-  $stmt->execute(['lesson_id' => $lessonId]);
-  $bookedCount = (int) $stmt->fetchColumn();
-
-  if ($bookedCount >= (int) $lesson['capacity']) {
-    $_SESSION['flash_error'] = 'This lesson is fully booked.';
-    header('Location: lessons.php');
-    exit;
-  }
-
-  $stmt = $pdo->prepare(
-    "SELECT 1 FROM lesson_bookings WHERE user_id = :user_id AND lesson_id = :lesson_id"
-  );
-  $stmt->execute([
-    'user_id' => $_SESSION['user_id'],
-    'lesson_id' => $lessonId
-  ]);
-
-  if ($stmt->fetchColumn()) {
-    $_SESSION['flash_error'] = 'You have already booked this lesson.';
-    header('Location: lessons.php');
-    exit;
-  }
-
-  $stmt = $pdo->prepare(
-    "INSERT INTO lesson_bookings (user_id, lesson_id) VALUES (:user_id, :lesson_id)"
-  );
-  $stmt->execute([
-    'user_id' => $_SESSION['user_id'],
-    'lesson_id' => $lessonId
-  ]);
-
-  $_SESSION['flash_success'] = 'Lesson booked successfully.';
-  header('Location: lessons.php');
-  exit;
 }
 
 $stmt = $pdo->prepare(
@@ -139,6 +161,7 @@ $lessons = $stmt->fetchAll();
                     </div>
                     <p class="card-text">Small group lesson with a calm, guided pace.</p>
                     <form method="post" action="lessons.php">
+                      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" />
                       <input type="hidden" name="lesson_id" value="<?php echo (int) ($lesson['id'] ?? 0); ?>" />
                       <button class="btn btn-secondary" type="submit">Book lesson</button>
                     </form>

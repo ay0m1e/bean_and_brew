@@ -1,9 +1,16 @@
 <?php
 include 'header.php';
 require 'config/db.php';
+require 'config/validate.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+  if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+    $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
+    header('Location: preorder.php');
+    exit;
+  }
+
   $userId = $_SESSION['user_id'];
 
   if (!isset($_SESSION['user_id'])){
@@ -12,11 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
   }
 
   if(empty($_SESSION['cart'])){
-    die('Your cart is empty');
+    $_SESSION['flash_error'] = 'Your cart is empty.';
+    header('Location: preorder.php');
+    exit;
   }
 
   
-  $collectionTime = $_POST['collection_time'];
+  $collectionTime = $_POST['collection_time'] ?? '';
+  if (!is_valid_time($collectionTime)) {
+    $_SESSION['flash_error'] = 'Please choose a valid collection time.';
+    header('Location: preorder.php');
+    exit;
+  }
 
 
   $stmt = $pdo->prepare(
@@ -49,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
   unset($_SESSION['cart']);
 
-  echo 'Order placed successfully';
+  $_SESSION['flash_success'] = 'Order placed successfully.';
+  header('Location: account.php');
+  exit;
 }
 ?>
 
@@ -693,6 +709,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <span>£<?php echo number_format($cartTotal, 2); ?></span>
               </div>
               <form id="checkout-form" class="checkout-form" method="post" action="checkout.php">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" />
                 <div class="checkout-field">
                   <label for="collection-time">Collection time</label>
                   <input id="collection-time" name="collection_time" type="time" required />
@@ -743,6 +760,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
               <p class="summary-value">£<?php echo number_format($cartTotal, 2); ?></p>
             </div>
             <form class="checkout-form checkout-form-bar" method="post" action="checkout.php">
+              <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" />
               <label class="sr-only" for="collection-time-bar">Collection time</label>
               <input
                 id="collection-time-bar"

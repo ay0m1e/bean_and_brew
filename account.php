@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])){
 $userId = $_SESSION['user_id'];
 
 $stmt = $pdo->prepare(
-    "SELECT id, collection_time, created_at
+    "SELECT id, collection_time, created_at, order_status
     FROM orders
     WHERE user_id = :user_id
     ORDER BY created_at DESC"
@@ -23,7 +23,7 @@ $stmt->execute([
 $orders = $stmt->fetchAll();
 
 $stmt = $pdo->prepare(
-  "SELECT l.title, l.lesson_date, l.lesson_time
+  "SELECT l.title, l.lesson_date, l.lesson_time, lb.created_at
   FROM lesson_bookings lb
   INNER JOIN lessons l ON l.id = lb.lesson_id
   WHERE lb.user_id = :user_id
@@ -35,7 +35,7 @@ $stmt->execute([
 $lessonsBooked = $stmt->fetchAll();
 
 $stmt = $pdo->prepare(
-  "SELECT location, booking_date, booking_time, guests
+  "SELECT location, booking_date, booking_time, guests, created_at
   FROM bookings
   WHERE user_id = :user_id
   ORDER BY booking_date DESC, booking_time DESC"
@@ -110,6 +110,13 @@ $bookings = $stmt->fetchAll();
                         ·
                         <?php echo htmlspecialchars($booking['guests'] ?? 'Guests', ENT_QUOTES, 'UTF-8'); ?>
                       </p>
+                      <p class="list-secondary">
+                        <?php
+                          $createdAt = $booking['created_at'] ?? '';
+                          $createdLabel = $createdAt ? date('M j, Y · H:i', strtotime($createdAt)) : 'Created';
+                          echo htmlspecialchars($createdLabel, ENT_QUOTES, 'UTF-8');
+                        ?>
+                      </p>
                     </div>
                     <span class="status-pill confirmed">Confirmed</span>
                   </li>
@@ -149,7 +156,21 @@ $bookings = $stmt->fetchAll();
                       <p class="list-secondary">
                         Collection · <?php echo htmlspecialchars($order['collection_time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
                       </p>
+                      <p class="list-secondary">
+                        <?php
+                          $createdAt = $order['created_at'] ?? '';
+                          $createdLabel = $createdAt ? date('M j, Y · H:i', strtotime($createdAt)) : 'Created';
+                          echo htmlspecialchars($createdLabel, ENT_QUOTES, 'UTF-8');
+                        ?>
+                      </p>
                     </div>
+                    <?php
+                      $status = $order['order_status'] ?? 'pending';
+                      $statusClass = $status === 'completed' ? 'completed' : 'upcoming';
+                    ?>
+                    <span class="status-pill <?php echo $statusClass; ?>">
+                      <?php echo htmlspecialchars(ucfirst($status), ENT_QUOTES, 'UTF-8'); ?>
+                    </span>
                   </div>
                   <?php foreach ($orderItems as $item) : ?>
                     <?php
@@ -191,23 +212,30 @@ $bookings = $stmt->fetchAll();
                       <p class="list-primary">
                         <?php echo htmlspecialchars($lesson['title'] ?? 'Lesson', ENT_QUOTES, 'UTF-8'); ?>
                       </p>
-                      <p class="list-secondary">
-                        <?php
-                          $lessonDate = $lesson['lesson_date'] ?? '';
-                          $lessonDateLabel = $lessonDate ? date('M j, Y', strtotime($lessonDate)) : 'Date';
-                          echo htmlspecialchars($lessonDateLabel, ENT_QUOTES, 'UTF-8');
-                        ?>
-                        ·
-                        <?php echo htmlspecialchars($lesson['lesson_time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
-                      </p>
-                    </div>
-                  </li>
+              <p class="list-secondary">
+                <?php
+                  $lessonDate = $lesson['lesson_date'] ?? '';
+                  $lessonDateLabel = $lessonDate ? date('M j, Y', strtotime($lessonDate)) : 'Date';
+                  echo htmlspecialchars($lessonDateLabel, ENT_QUOTES, 'UTF-8');
+                ?>
+                ·
+                <?php echo htmlspecialchars($lesson['lesson_time'] ?? 'Time', ENT_QUOTES, 'UTF-8'); ?>
+              </p>
+              <p class="list-secondary">
+                <?php
+                  $lessonCreated = $lesson['created_at'] ?? '';
+                  $lessonCreatedLabel = $lessonCreated ? date('M j, Y · H:i', strtotime($lessonCreated)) : 'Booked';
+                  echo htmlspecialchars($lessonCreatedLabel, ENT_QUOTES, 'UTF-8');
+                ?>
+              </p>
+            </div>
+          </li>
                 <?php endforeach; ?>
               </ul>
             <?php else : ?>
-              <p class="empty-state">You haven’t placed any orders yet.</p>
-            <?php endif; ?>
-          </div>
+            <p class="empty-state">You haven’t booked any lessons yet.</p>
+          <?php endif; ?>
+        </div>
           <!-- LESSONS SECTION END -->
         </div>
       </section>

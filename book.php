@@ -2,6 +2,7 @@
 include 'header.php'; 
 
 require 'config/db.php';
+require 'config/validate.php';
 
 if (!isset ($_SESSION['user_id'])){
   header('Location: login.php');
@@ -11,11 +12,41 @@ if (!isset ($_SESSION['user_id'])){
 
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+  if (empty($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+    $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
+    header('Location: book.php');
+    exit;
+  }
+
   $userId = $_SESSION['user_id'];
-  $location = trim($_POST['location']);
-  $date = $_POST['booking_date'];
-  $time = $_POST['booking_time'];
+  $location = sanitize_text($_POST['location'] ?? '');
+  $date = $_POST['booking_date'] ?? '';
+  $time = $_POST['booking_time'] ?? '';
   $guests = (int) $_POST['guests'];
+
+  if (!is_required($location) || !is_valid_date($date) || !is_valid_time($time) || $guests < 1) {
+    $_SESSION['flash_error'] = 'Please complete all booking fields.';
+    header('Location: book.php');
+    exit;
+  }
+
+  $capacityLimit = 10;
+  $checkStmt = $pdo->prepare(
+    "SELECT COUNT(*) FROM bookings
+    WHERE location = :location AND booking_date = :booking_date AND booking_time = :booking_time"
+  );
+  $checkStmt->execute([
+    'location' => $location,
+    'booking_date' => $date,
+    'booking_time' => $time
+  ]);
+  $existingCount = (int) $checkStmt->fetchColumn();
+
+  if ($existingCount >= $capacityLimit) {
+    $_SESSION['flash_error'] = 'That time slot is fully booked.';
+    header('Location: book.php');
+    exit;
+  }
 
   $stmt = $pdo->prepare(
     "INSERT INTO bookings (user_id, location, booking_date, booking_time, guests)
@@ -31,8 +62,9 @@ $stmt->execute([
     'guests' => $guests
   ]);
 
-  $bookingMessage = 'Reservation received. We will hold your table for 10 minutes.';
-  $bookingMessageType = 'success';
+  $_SESSION['flash_success'] = 'Reservation received. We will hold your table for 10 minutes.';
+  header('Location: book.php');
+  exit;
 }
 
 ?>
@@ -76,12 +108,8 @@ $stmt->execute([
       <!-- BOOKING FORM START -->
       <section class="section booking-form">
         <div class="container">
-          <?php if (!empty($bookingMessage)) : ?>
-            <div class="message message--<?php echo htmlspecialchars($bookingMessageType ?? 'info', ENT_QUOTES, 'UTF-8'); ?>">
-              <?php echo htmlspecialchars($bookingMessage, ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-          <?php endif; ?>
           <form class="booking-steps" action="#" method="post">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" />
             <div class="form-grid">
               <div class="field">
                 <label for="location">Location</label>

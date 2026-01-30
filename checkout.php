@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'config/db.php';
+require 'config/validate.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: preorder.php');
@@ -8,20 +9,30 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 if (!isset($_SESSION['user_id'])) {
+    $_SESSION['flash_error'] = 'Please sign in to continue.';
     header('Location: login.php');
     exit;
 }
 
 if (empty($_SESSION['cart'])) {
+    $_SESSION['flash_error'] = 'Your cart is empty.';
     header('Location: preorder.php');
     exit;
 }
 
 $userId = $_SESSION['user_id'];
 
+$token = $_POST['csrf_token'] ?? '';
+if (empty($token) || $token !== ($_SESSION['csrf_token'] ?? '')) {
+    $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
+    header('Location: preorder.php');
+    exit;
+}
+
 $collectionTime = $_POST['collection_time'] ?? null;
 
 if (!$collectionTime) {
+    $_SESSION['flash_error'] = 'Please choose a collection time.';
     header('Location: preorder.php');
     exit;
 }

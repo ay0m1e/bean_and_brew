@@ -1,15 +1,37 @@
 <?php
 require 'config/db.php';
+require 'config/validate.php';
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $name = trim($_POST['full_name']);
-  $email = trim($_POST['email']);
-  $password = $_POST['password'];
-  $confirmPassword = $_POST['confirm_password'];
+  $name = sanitize_text($_POST['full_name'] ?? '');
+  $email = sanitize_text($_POST['email'] ?? '');
+  $password = $_POST['password'] ?? '';
+  $confirmPassword = $_POST['confirm_password'] ?? '';
   
+  if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $_SESSION['flash_error'] = 'Please enter a valid email address.';
+    header('Location: register.php');
+    exit;
+  }
+
+  if (empty($name)) {
+    $_SESSION['flash_error'] = 'Please enter your full name.';
+    header('Location: register.php');
+    exit;
+  }
+
+  if (empty($password) || empty($confirmPassword)) {
+    $_SESSION['flash_error'] = 'Please enter and confirm your password.';
+    header('Location: register.php');
+    exit;
+  }
+
 
   if ($password !== $confirmPassword){
-    die('Passwords do not match');
+    $_SESSION['flash_error'] = 'Passwords do not match.';
+    header('Location: register.php');
+    exit;
   }
 
   $checkStmt = $pdo->prepare(
@@ -21,7 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   ]);
 
   if ($checkStmt->fetch()){
-    die('An account with this email already exists');
+    $_SESSION['flash_error'] = 'An account with this email already exists.';
+    header('Location: register.php');
+    exit;
   }
 
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -38,7 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   ]);
   
 
-  echo 'User registered successfully';
+  $_SESSION['flash_success'] = 'Account created. You can now sign in.';
+  header('Location: login.php');
+  exit;
 }
 
 
@@ -80,6 +106,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </header>
     <!-- HEADER END -->
+
+    <!-- FLASH MESSAGES -->
+    <?php if (!empty($_SESSION['flash_success']) || !empty($_SESSION['flash_error'])): ?>
+      <div class="flash-wrap">
+        <?php if (!empty($_SESSION['flash_success'])): ?>
+          <div class="flash flash-success">
+            <?php echo htmlspecialchars($_SESSION['flash_success'], ENT_QUOTES, 'UTF-8'); ?>
+          </div>
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['flash_error'])): ?>
+          <div class="flash flash-error">
+            <?php echo htmlspecialchars($_SESSION['flash_error'], ENT_QUOTES, 'UTF-8'); ?>
+          </div>
+        <?php endif; ?>
+      </div>
+      <?php
+        unset($_SESSION['flash_success'], $_SESSION['flash_error']);
+      ?>
+    <?php endif; ?>
 
     <main class="auth-page">
       <!-- AUTH INTRO START -->
